@@ -1,6 +1,5 @@
 package com.mmorrell.strategies.openbook.spl;
 
-import com.mmorrell.SerumApplication;
 import com.mmorrell.pricing.JupiterPricingSource;
 import com.mmorrell.serum.manager.SerumManager;
 import com.mmorrell.serum.model.Market;
@@ -20,7 +19,7 @@ import org.p2p.solanaj.programs.MemoProgram;
 import org.p2p.solanaj.rpc.RpcClient;
 import org.p2p.solanaj.rpc.RpcException;
 import org.p2p.solanaj.rpc.types.config.Commitment;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.PathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
@@ -102,9 +101,8 @@ public class OpenBookOrcaUsdc extends Strategy {
         this.market = this.marketBuilder.build();
 
         // Load private key
-        ClassPathResource resource = new ClassPathResource(
-                "/mikefsWLEcNYHgsiwSRr6PVd7yVcoKeaURQqeDE1tXN.json",
-                SerumApplication.class
+        PathResource resource = new PathResource(
+               SOLANA_WALLET_KEYPAIR_JSON_PATH
         );
 
         try (InputStream inputStream = resource.getInputStream()) {

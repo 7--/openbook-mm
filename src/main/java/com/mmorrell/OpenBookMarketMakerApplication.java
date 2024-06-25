@@ -8,11 +8,11 @@ import java.util.Map;
 
 @RestController
 @SpringBootApplication
-public class SerumApplication {
+public class OpenBookMarketMakerApplication {
 
     final StrategyManager strategyManager;
 
-    public SerumApplication(StrategyManager strategyManager) {
+    public OpenBookMarketMakerApplication(StrategyManager strategyManager) {
         this.strategyManager = strategyManager;
     }
 
@@ -29,7 +29,7 @@ public class SerumApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(SerumApplication.class, args);
+        SpringApplication.run(OpenBookMarketMakerApplication.class, args);
     }
 
 }

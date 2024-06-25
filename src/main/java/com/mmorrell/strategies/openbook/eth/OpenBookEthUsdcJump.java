@@ -1,6 +1,5 @@
 package com.mmorrell.strategies.openbook.eth;
 
-import com.mmorrell.SerumApplication;
 import com.mmorrell.serum.manager.SerumManager;
 import com.mmorrell.serum.model.Market;
 import com.mmorrell.serum.model.MarketBuilder;
@@ -20,7 +19,7 @@ import org.p2p.solanaj.programs.MemoProgram;
 import org.p2p.solanaj.rpc.RpcClient;
 import org.p2p.solanaj.rpc.RpcException;
 import org.p2p.solanaj.rpc.types.config.Commitment;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.PathResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,9 +102,8 @@ public class OpenBookEthUsdcJump extends Strategy {
         this.bestAskPrice = this.solUsdcMarket.getAskOrderBook().getBestAsk().getFloatPrice();
 
         // Load private key
-        ClassPathResource resource = new ClassPathResource(
-                "/mikefsWLEcNYHgsiwSRr6PVd7yVcoKeaURQqeDE1tXN.json",
-                SerumApplication.class
+        PathResource resource = new PathResource(
+               SOLANA_WALLET_KEYPAIR_JSON_PATH
         );
 
         try (InputStream inputStream = resource.getInputStream()) {

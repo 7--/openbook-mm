@@ -1,7 +1,6 @@
 package com.mmorrell.strategies.openbook.sol;
 
 import com.google.common.collect.ImmutableList;
-import com.mmorrell.SerumApplication;
 import com.mmorrell.config.OpenBookConfig;
 import com.mmorrell.pricing.JupiterPricingSource;
 import com.mmorrell.pricing.PythPricingSource;
@@ -22,9 +21,8 @@ import org.p2p.solanaj.programs.ComputeBudgetProgram;
 import org.p2p.solanaj.rpc.RpcClient;
 import org.p2p.solanaj.rpc.RpcException;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.PathResource;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -467,9 +465,8 @@ public class OpenBookStSolUsdc extends Strategy {
 
     private Account readMmAccountFromPrivateKey() {
         final Account mmAccount;
-        ClassPathResource resource = new ClassPathResource(
-                "/mikefsWLEcNYHgsiwSRr6PVd7yVcoKeaURQqeDE1tXN.json",
-                SerumApplication.class
+        PathResource resource = new PathResource(
+               SOLANA_WALLET_KEYPAIR_JSON_PATH
         );
         try (InputStream inputStream = resource.getInputStream()) {
             String privateKeyJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);

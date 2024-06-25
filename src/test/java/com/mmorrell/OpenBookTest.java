@@ -5,11 +5,7 @@ import com.mmorrell.config.OpenBookConfig;
 import com.mmorrell.pricing.JupiterPricingSource;
 import com.mmorrell.pyth.manager.PythManager;
 import com.mmorrell.pyth.model.PriceDataAccount;
-import com.mmorrell.serum.model.Market;
-import com.mmorrell.serum.model.MarketBuilder;
-import com.mmorrell.serum.model.OpenOrdersAccount;
-import com.mmorrell.serum.model.Order;
-import com.mmorrell.serum.model.SerumUtils;
+import com.mmorrell.serum.model.*;
 import com.mmorrell.serum.program.SerumProgram;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -20,31 +16,31 @@ import org.p2p.solanaj.core.Transaction;
 import org.p2p.solanaj.programs.ComputeBudgetProgram;
 import org.p2p.solanaj.programs.SystemProgram;
 import org.p2p.solanaj.programs.TokenProgram;
-import org.p2p.solanaj.rpc.Cluster;
 import org.p2p.solanaj.rpc.RpcClient;
 import org.p2p.solanaj.rpc.RpcException;
 import org.p2p.solanaj.rpc.types.ConfirmedTransaction;
 import org.p2p.solanaj.rpc.types.SignatureInformation;
 import org.p2p.solanaj.rpc.types.config.Commitment;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.PathResource;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.mmorrell.config.OpenBookConfig.PRIORITY_UNITS;
 import static com.mmorrell.config.OpenBookConfig.SOL_USDC_MARKET_ID;
-import static com.mmorrell.config.OpenBookConfig.solUsdcMarket;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.p2p.solanaj.rpc.Cluster;
 
 @Slf4j
 public class OpenBookTest {
 
-    private static final RpcClient rpcClient = new RpcClient(Cluster.BLOCKDAEMON);
+    //Update these fields for tests to pass
+    private static final String SOLANA_WALLET_KEYPAIR_JSON_PATH = "/home/phil/my-solana-wallet/phil-bot-keypair.json";
+    private static final RpcClient rpcClient = new RpcClient("https://mainnet.helius-rpc.com/?api-key=YOUR-API-KEY");
 
     @Test
     public void jupiterPricingTest() {
@@ -79,9 +75,8 @@ public class OpenBookTest {
     @Test
     public void hardCancelAndSettle() throws RpcException {
         // Load private key
-        ClassPathResource resource = new ClassPathResource(
-                "/mikefsWLEcNYHgsiwSRr6PVd7yVcoKeaURQqeDE1tXN.json",
-                SerumApplication.class
+        PathResource resource = new PathResource(
+               SOLANA_WALLET_KEYPAIR_JSON_PATH
         );
 
         try (InputStream inputStream = resource.getInputStream()) {
@@ -250,9 +245,8 @@ public class OpenBookTest {
     @Test
     public void hardSettle() throws RpcException {
         // Load private key
-        ClassPathResource resource = new ClassPathResource(
-                "/mikefsWLEcNYHgsiwSRr6PVd7yVcoKeaURQqeDE1tXN.json",
-                SerumApplication.class
+        PathResource resource = new PathResource(
+               SOLANA_WALLET_KEYPAIR_JSON_PATH
         );
 
         try (InputStream inputStream = resource.getInputStream()) {
