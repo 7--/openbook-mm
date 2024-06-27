@@ -40,7 +40,7 @@ public class OpenBookTest {
 
     //Update these fields for tests to pass
     private static final String SOLANA_WALLET_KEYPAIR_JSON_PATH = "/home/phil/my-solana-wallet/phil-bot-keypair.json";
-    private static final RpcClient rpcClient = new RpcClient("https://mainnet.helius-rpc.com/?api-key=YOUR-API-KEY");
+    private static final RpcClient rpcClient = new RpcClient("https://mainnet.helius-rpc.com/?api-key=" + System.getenv("API_KEY"));
 
     @Test
     public void jupiterPricingTest() {

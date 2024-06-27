@@ -1,5 +1,6 @@
 package com.mmorrell.strategies.openbook.spl;
 
+import com.mmorrell.config.OpenBookConfig;
 import com.mmorrell.pricing.JupiterPricingSource;
 import com.mmorrell.serum.manager.SerumManager;
 import com.mmorrell.serum.model.Market;
@@ -19,8 +20,10 @@ import org.p2p.solanaj.programs.MemoProgram;
 import org.p2p.solanaj.rpc.RpcClient;
 import org.p2p.solanaj.rpc.RpcException;
 import org.p2p.solanaj.rpc.types.config.Commitment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.PathResource;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +41,7 @@ import static com.mmorrell.config.OpenBookConfig.USDC_THRESHOLD_TO_LEAN_WSOL;
 import static com.mmorrell.config.OpenBookConfig.generateLeanFactor;
 
 
-//@Component
+@Component
 @Slf4j
 @Getter
 public class OpenBookBonkUsdc extends Strategy {
@@ -83,10 +86,12 @@ public class OpenBookBonkUsdc extends Strategy {
 
     // Used to delay 2000ms on first order place.
     private static boolean firstLoadComplete = false;
+    private OpenBookConfig openBookConfig;
 
     public OpenBookBonkUsdc(final SerumManager serumManager,
                             final RpcClient rpcClient,
-                            final JupiterPricingSource jupiterPricingSource) {
+                            final JupiterPricingSource jupiterPricingSource,
+                            final OpenBookConfig openBookConfig) {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
         this.jupiterPricingSource = jupiterPricingSource;
 
@@ -101,7 +106,7 @@ public class OpenBookBonkUsdc extends Strategy {
 
         // Load private key
         PathResource resource = new PathResource(
-               SOLANA_WALLET_KEYPAIR_JSON_PATH
+                openBookConfig.getKEYPAIR_PATH()
         );
 
         try (InputStream inputStream = resource.getInputStream()) {

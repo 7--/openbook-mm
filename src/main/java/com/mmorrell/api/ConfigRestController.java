@@ -2,6 +2,7 @@ package com.mmorrell.api;
 
 import com.mmorrell.config.OpenBookConfig;
 import com.mmorrell.strategies.openbook.sol.OpenBookSolUsdc;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,8 @@ import static com.mmorrell.config.OpenBookConfig.widenBids;
 public class ConfigRestController {
 
     private final OpenBookSolUsdc openBookSolUsdc;
+
+    @Autowired
     public ConfigRestController(OpenBookSolUsdc openBookSolUsdc) {
         this.openBookSolUsdc = openBookSolUsdc;
     }

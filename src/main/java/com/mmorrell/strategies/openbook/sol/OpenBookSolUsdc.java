@@ -24,8 +24,10 @@ import org.p2p.solanaj.programs.TokenProgram;
 import org.p2p.solanaj.rpc.RpcClient;
 import org.p2p.solanaj.rpc.RpcException;
 import org.p2p.solanaj.rpc.types.config.Commitment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -83,7 +85,6 @@ import static com.mmorrell.config.OpenBookConfig.solUsdcMarket;
 
 @Component
 @Slf4j
-@Getter
 public class OpenBookSolUsdc extends Strategy {
     private final RpcClient rpcClient;
     private final RpcClient dataRpcClient;
@@ -104,19 +105,17 @@ public class OpenBookSolUsdc extends Strategy {
     private static final Deque<Float> askSmaValues = new ArrayDeque<>(4);
     private List<Order> bidOrders;
     private List<Order> askOrders;
+    private OpenBookConfig openBookConfig;
 
-    @Value("${openbook.strategies.solusdc.ooa}")
-    public String solUsdcOoa;
     private PublicKey solUsdcOoaPubkey;
-
-    @Value("${openbook.strategies.solusdc.quoteWallet}")
-    public String solUsdcQuoteWallet;
     private PublicKey solUsdcQuoteWalletPubkey;
 
     public OpenBookSolUsdc(final SerumManager serumManager,
                            final RpcClient rpcClient,
                            @Qualifier("data") final RpcClient dataRpcClient,
-                           final PythPricingSource pythPricingSource) {
+                           final PythPricingSource pythPricingSource,
+                           final OpenBookConfig openBookConfig) {
+        this.openBookConfig = openBookConfig;
         this.executorService = Executors.newScheduledThreadPool(128);
         this.serumManager = serumManager;
         this.rpcClient = rpcClient;
@@ -137,8 +136,8 @@ public class OpenBookSolUsdc extends Strategy {
 
     @PostConstruct
     public void init() {
-        this.solUsdcOoaPubkey = new PublicKey(solUsdcOoa);
-        this.solUsdcQuoteWalletPubkey = new PublicKey(solUsdcQuoteWallet);
+        this.solUsdcOoaPubkey = new PublicKey(openBookConfig.getOOA_ADDRESS());
+        this.solUsdcQuoteWalletPubkey = new PublicKey(openBookConfig.getQUOTE_WALLET());
         log.info("SOL/USDC OOA: " + solUsdcOoaPubkey.toBase58());
     }
 
@@ -921,7 +920,7 @@ public class OpenBookSolUsdc extends Strategy {
     private Account readMmAccountFromPrivateKey() {
         final Account mmAccount;
         PathResource resource = new PathResource(
-               SOLANA_WALLET_KEYPAIR_JSON_PATH
+               openBookConfig.getKEYPAIR_PATH()
         );
         try (InputStream inputStream = resource.getInputStream()) {
             String privateKeyJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);

@@ -20,9 +20,11 @@ import org.p2p.solanaj.core.Transaction;
 import org.p2p.solanaj.programs.ComputeBudgetProgram;
 import org.p2p.solanaj.rpc.RpcClient;
 import org.p2p.solanaj.rpc.RpcException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.PathResource;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +56,7 @@ import static com.mmorrell.config.OpenBookConfig.SOL_ASK_AMOUNT;
 import static com.mmorrell.config.OpenBookConfig.USDC_BID_AMOUNT_IN_WSOL;
 import static com.mmorrell.config.OpenBookConfig.jitoSolUsdcMarket;
 
-// @Component
+@Component
 @Slf4j
 @Getter
 public class OpenBookJitoSolUsdc extends Strategy {
@@ -78,12 +80,15 @@ public class OpenBookJitoSolUsdc extends Strategy {
     private static final float JITOSOL_BID_SPREAD = 0.996f;
     private static final float JITOSOL_ASK_SPREAD = 1.002f;
     private static final String JUP_SYMBOL = "JitoSOL";
+    private OpenBookConfig openBookConfig;
 
     public OpenBookJitoSolUsdc(final SerumManager serumManager,
                                final RpcClient rpcClient,
                                @Qualifier("data") final RpcClient dataRpcClient,
                                final PythPricingSource pythPricingSource,
-                               final JupiterPricingSource jupiterPricingSource) {
+                               final JupiterPricingSource jupiterPricingSource,
+                               final OpenBookConfig openBookConfig) {
+        this.openBookConfig = openBookConfig;
         this.executorService = Executors.newScheduledThreadPool(2);
         this.serumManager = serumManager;
         this.rpcClient = rpcClient;
@@ -468,7 +473,7 @@ public class OpenBookJitoSolUsdc extends Strategy {
     private Account readMmAccountFromPrivateKey() {
         final Account mmAccount;
         PathResource resource = new PathResource(
-               SOLANA_WALLET_KEYPAIR_JSON_PATH
+                openBookConfig.getKEYPAIR_PATH()
         );
         try (InputStream inputStream = resource.getInputStream()) {
             String privateKeyJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);

@@ -1,5 +1,6 @@
 package com.mmorrell.strategies.openbook.sol;
 
+import com.mmorrell.config.OpenBookConfig;
 import com.mmorrell.serum.manager.SerumManager;
 import com.mmorrell.serum.model.Market;
 import com.mmorrell.serum.model.MarketBuilder;
@@ -18,7 +19,9 @@ import org.p2p.solanaj.programs.MemoProgram;
 import org.p2p.solanaj.rpc.RpcClient;
 import org.p2p.solanaj.rpc.RpcException;
 import org.p2p.solanaj.rpc.types.config.Commitment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.PathResource;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +39,7 @@ import static com.mmorrell.config.OpenBookConfig.USDC_THRESHOLD_TO_LEAN_WSOL;
 import static com.mmorrell.config.OpenBookConfig.generateLeanFactor;
 
 
-//@Component
+@Component
 @Slf4j
 @Getter
 public class OpenBookMarinadeSolUsdc extends Strategy {
@@ -83,7 +86,8 @@ public class OpenBookMarinadeSolUsdc extends Strategy {
     private static boolean firstLoadComplete = false;
 
     public OpenBookMarinadeSolUsdc(final SerumManager serumManager,
-                                   final RpcClient rpcClient) {
+                                   final RpcClient rpcClient,
+                                   final OpenBookConfig openBookConfig) {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
 
         this.serumManager = serumManager;
@@ -99,7 +103,7 @@ public class OpenBookMarinadeSolUsdc extends Strategy {
 
         // Load private key
         PathResource resource = new PathResource(
-               SOLANA_WALLET_KEYPAIR_JSON_PATH
+                openBookConfig.getKEYPAIR_PATH()
         );
 
         try (InputStream inputStream = resource.getInputStream()) {

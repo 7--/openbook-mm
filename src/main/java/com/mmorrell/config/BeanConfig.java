@@ -5,26 +5,24 @@ import com.mmorrell.pyth.manager.PythManager;
 import com.mmorrell.serum.manager.SerumManager;
 import okhttp3.OkHttpClient;
 import org.p2p.solanaj.rpc.RpcClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
 
 @Configuration
-@PropertySource("classpath:openbook.properties")
+@Component
 @EnableScheduling
 @EnableAsync
 public class BeanConfig {
 
     public static final String MEMO = "mmorrell.com / @skynetcap";
-
-    @Value("${solana.rpc.url}")
-    public String RPC_URL;
-
-    @Value("${solana.data.rpc.url}")
-    public String DATA_RPC_URL;
+    @Autowired
+    private OpenBookConfig openBookConfig;
 
     @Bean
     public RpcClient rpcClient() {
@@ -32,7 +30,7 @@ public class BeanConfig {
         int connectTimeoutMs = 470;
         int writeTimeoutMs = 955;
         return new RpcClient(
-                RPC_URL,
+                openBookConfig.getRPC_URL(),
                 readTimeoutMs,
                 connectTimeoutMs,
                 writeTimeoutMs
@@ -45,7 +43,7 @@ public class BeanConfig {
         int connectTimeoutMs = 470;
         int writeTimeoutMs = 955;
         return new RpcClient(
-                DATA_RPC_URL,
+                openBookConfig.getRPC_URL(),
                 readTimeoutMs,
                 connectTimeoutMs,
                 writeTimeoutMs
@@ -71,5 +69,11 @@ public class BeanConfig {
     public PythManager pythManager() {
         return new PythManager(dataRpcClient());
     }
+
+    @Bean
+    public OpenBookConfig openBookConfigBean() {
+        return openBookConfig;
+    }
+
 
 }

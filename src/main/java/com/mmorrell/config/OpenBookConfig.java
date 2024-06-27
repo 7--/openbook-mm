@@ -5,12 +5,53 @@ import com.mmorrell.serum.model.MarketBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.p2p.solanaj.core.Account;
 import org.p2p.solanaj.core.PublicKey;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@PropertySource("classpath:openbook.properties")
+@PropertySource("classpath:openbook-devnet.properties")
+@Component
 @Slf4j
 public class OpenBookConfig {
+
+    @Value("${solana.rpc.url}")
+    private String RPC_URL;
+
+    @Value("${solana.data.rpc.url}")
+    private String DATA_RPC_URL;
+
+    @Value("${solana.wallet.keypair.json.path}")
+    private String KEYPAIR_PATH;
+
+    @Value("${openbook.strategies.solusdc.ooa}")
+    private String OOA_ADDRESS;
+
+    @Value("${openbook.strategies.solusdc.quoteWallet}")
+    private String QUOTE_WALLET;
+
+    public String getRPC_URL() {
+        return RPC_URL;
+    }
+
+    public String getDATA_RPC_URL() {
+        return DATA_RPC_URL;
+    }
+
+    public String getQUOTE_WALLET() {
+        return QUOTE_WALLET;
+    }
+
+    public String getOOA_ADDRESS() {
+        return OOA_ADDRESS;
+    }
+
+    public String getKEYPAIR_PATH() {
+        return KEYPAIR_PATH;
+    }
 
     // User-set
     public static final PublicKey USDC_QUOTE_WALLET
