@@ -55,7 +55,7 @@ public class OpenBookConfig {
 
     // User-set
     public static final PublicKey USDC_QUOTE_WALLET
-            = new PublicKey("A6Jcj1XV6QqDpdimmL7jm1gQtSP62j8BWbyqkdhe4eLe");
+            = new PublicKey("E7GEj1yZ4MtK5aj5GZTeHkLEW63Qur6uBsWMiAZYc3rw");
 
     // SOL
     public static final PublicKey SOL_USDC_MARKET_ID
@@ -78,12 +78,12 @@ public class OpenBookConfig {
             = new PublicKey("CEGu1nP3t2BStW5e71YnvjZRN1oMstJxgtm4PXNa8KGj");
 
     // Parameters
-    public static final float INITIAL_CAPITAL = 2f;  // minus ~1k from actual capital, since some SOL at start
+    public static final float INITIAL_CAPITAL = .02f;  // minus ~1k from actual capital, since some SOL at start
     // higher max target units longer afk. 28 good for an active session (1.5 hrs), probably 30 longer.
-    public static final float TARGET_MAX_UNITS = 2f; // 13 units = 19000/ 24/13 (sol) = 60 SOL/bet. more units better
+    public static final float TARGET_MAX_UNITS = .02f; // 13 units = 19000/ 24/13 (sol) = 60 SOL/bet. more units better
 
     // Finals - Sensitive
-    public static final float START_SOL_PRICE = 22f; // on the conservative estimate, 26 is only a fallback
+    public static final float START_SOL_PRICE = 100f; // on the conservative estimate, 100 is only a fallback
     public static final float DEFAULT_BID_SPREAD_MULTIPLIER = 0.99884f;
     public static final float DEFAULT_ASK_SPREAD_MULTIPLIER = 0.999f;
     public static final float CROSS_DETECTION_PADDING = 0.00005f; // since gte or lte is too precise
@@ -94,7 +94,7 @@ public class OpenBookConfig {
     public static final float ALLOWED_PRICING_BPS_MISMATCH = 0.00002f; // widen to lower quote rate: 0.000052f;
     public static final int EVENT_QUEUE_SIZE_THRESHOLD_FOR_WIDEN = 430;
     public static final float EVENT_QUEUE_SIZE_ASK_WIDEN = 1.0003f;
-    public static final int EVENT_LOOP_DURATION_MS = 165;
+    public static final int EVENT_LOOP_DURATION_MS = 10065;
     public static final long ORDER_BOOK_POLL_INTERVAL = 210L;
     public static final long LEAN_CALCULATION_INITIAL_DELAY = 1000L;
     public static final long LEAN_CALCULATION_INTERVAL = 9_000L;
@@ -105,10 +105,10 @@ public class OpenBookConfig {
     public static float ASK_SPREAD_MULTIPLIER = DEFAULT_ASK_SPREAD_MULTIPLIER;
     public static boolean GIGA_LEANING = false;
     public static boolean IS_WSOL_LEANING = false; // Used when pricing against ASX and we have giga inventory
-    public static float SOL_QUOTE_SIZE = 1f; //Math.round(INITIAL_CAPITAL / START_SOL_PRICE / TARGET_MAX_UNITS) / 2f;
+    public static float SOL_QUOTE_SIZE = 0.001f; //Math.round(INITIAL_CAPITAL / START_SOL_PRICE / TARGET_MAX_UNITS) / 2f;
     public static float USDC_BID_AMOUNT_IN_WSOL = SOL_QUOTE_SIZE / 2;
     public static float SOL_ASK_AMOUNT = SOL_QUOTE_SIZE * .80f;
-    public static final double WSOL_STARTING_AMOUNT = 3.0; //(SOL_QUOTE_SIZE * 1.02) + 2; // 55
+    public static final double WSOL_STARTING_AMOUNT = 0.03; //(SOL_QUOTE_SIZE * 1.02) + 2; // 55
     public static final double WSOL_THRESHOLD_TO_LEAN_USDC = WSOL_STARTING_AMOUNT * 1.2;
     public static final double USDC_THRESHOLD_TO_LEAN_WSOL = INITIAL_CAPITAL / 3.0;
     public static int PRIORITY_MICRO_LAMPORTS_DEFAULT = 101_420; //Rate

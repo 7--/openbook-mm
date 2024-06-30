@@ -26,9 +26,9 @@ public class BeanConfig {
 
     @Bean
     public RpcClient rpcClient() {
-        int readTimeoutMs = 1050;
-        int connectTimeoutMs = 470;
-        int writeTimeoutMs = 955;
+        int readTimeoutMs = 0;
+        int connectTimeoutMs = 0;
+        int writeTimeoutMs = 0;
         return new RpcClient(
                 openBookConfig.getRPC_URL(),
                 readTimeoutMs,
@@ -39,9 +39,9 @@ public class BeanConfig {
 
     @Bean(name = "data")
     public RpcClient dataRpcClient() {
-        int readTimeoutMs = 1050;
-        int connectTimeoutMs = 470;
-        int writeTimeoutMs = 955;
+        int readTimeoutMs = 0;
+        int connectTimeoutMs = 0;
+        int writeTimeoutMs = 0;
         return new RpcClient(
                 openBookConfig.getRPC_URL(),
                 readTimeoutMs,
